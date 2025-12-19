@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.1.3 — Dev Tooling & Documentation (Janeiro 2025)
+
+### 🛠️ Developer Experience
+- **Smoke Test**: Validação de sintaxe Python sem dependências do Blender
+- **CI Integration**: Smoke test executado automaticamente antes do empacotamento
+- **Bump Version Script**: Automação de incremento de versão (major/minor/patch)
+- **CHANGELOG Validation**: Modo `--strict` valida entrada de versão no CHANGELOG
+
+### 📚 Documentação
+- **README**: Expandido com exemplos de uso (retopo, game, CAD)
+- **README**: Adicionada seção "Desenvolvimento Local" com setup detalhado
+- **CONTRIBUTING.md**: Guia completo de contribuição (200+ linhas)
+- **TROUBLESHOOTING.md**: Guia de resolução de problemas comuns
+
+### 🔧 Scripts
+- `scripts/smoke_test.py`: Validação de sintaxe com py_compile
+- `scripts/bump_version.py`: Atualiza `__init__.py`, `blender_manifest.toml` e `CHANGELOG.md`
+- `scripts/package_addon.py`: Validação de CHANGELOG em modo `--strict`
+
+
 ## [0.1.2] — Fix ImportError (Janeiro 2025)
 
 ### 🐛 Correções

@@ -1,13 +1,13 @@
 # Blender Extensions Manifest (skeleton)
 # Referência: https://projects.blender.org/blender/blender-addons / docs do Extensions
 
-schema_version = "1.0.0"
+schema_version = "0.1.3"
 
 # ID único do add-on no catálogo (ajuste após reservar o namespace)
 id = "field_remesher"
 
 name = "Field Remesher (Instant-like)"
-version = "0.1.2"
+version = "0.1.3"
 type = "add-on"
 
 # Versões suportadas do Blender (ajuste conforme políticas do Extensions)
