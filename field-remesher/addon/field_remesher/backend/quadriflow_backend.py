@@ -15,7 +15,26 @@ def run_quadriflow(context, obj, s):
 
     override = get_view3d_override(context, obj)
     if override is None:
-        raise RuntimeError("Não foi possível obter contexto de View3D para executar Quadriflow.")
+        # Tenta executar sem override; se falhar, retorna mensagem acionável
+        kwargs = dict(
+            use_mesh_symmetry=s.use_mesh_symmetry,
+            use_preserve_sharp=s.use_preserve_sharp,
+            use_preserve_boundary=s.use_preserve_boundary,
+            preserve_attributes=s.preserve_attributes,
+            smooth_normals=s.smooth_normals,
+            mode=s.mode,
+            target_ratio=s.target_ratio,
+            target_edge_length=s.target_edge_length,
+            target_faces=s.target_faces,
+            seed=s.seed,
+        )
+        try:
+            bpy.ops.object.quadriflow_remesh(**kwargs)
+            return
+        except Exception:
+            raise RuntimeError(
+                "Contexto View3D não encontrado. Abra uma janela View3D (Layout) e tente novamente."
+            )
 
     kwargs = dict(
         use_mesh_symmetry=s.use_mesh_symmetry,

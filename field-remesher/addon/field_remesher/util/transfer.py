@@ -14,6 +14,30 @@ def transfer_attributes(src_obj, dst_obj, do_uv=True, do_vcol=True):
     if src_obj.type != "MESH" or dst_obj.type != "MESH":
         return
 
+    # Checagens prévias: apenas aplicar quando existirem dados relevantes
+    has_uv = False
+    has_vcol = False
+    try:
+        # Blender 3.x+
+        has_uv = hasattr(src_obj.data, "uv_layers") and len(src_obj.data.uv_layers) > 0
+    except Exception:
+        has_uv = False
+    try:
+        # Compatibilidade: vertex_colors (antigo) ou color_attributes (novo)
+        if hasattr(src_obj.data, "color_attributes"):
+            has_vcol = len(src_obj.data.color_attributes) > 0
+        elif hasattr(src_obj.data, "vertex_colors"):
+            has_vcol = len(src_obj.data.vertex_colors) > 0
+    except Exception:
+        has_vcol = False
+
+    actual_do_uv = do_uv and has_uv
+    actual_do_vcol = do_vcol and has_vcol
+
+    if not actual_do_uv and not actual_do_vcol:
+        # Nada a transferir
+        return
+
     mod = dst_obj.modifiers.new(name="FR_DataTransfer", type="DATA_TRANSFER")
     mod.object = src_obj
     mod.use_object_transform = False
@@ -27,9 +51,9 @@ def transfer_attributes(src_obj, dst_obj, do_uv=True, do_vcol=True):
     mod.use_loop_data = True
 
     desired = set()
-    if do_uv:
+    if actual_do_uv:
         desired.add("UV")
-    if do_vcol:
+    if actual_do_vcol:
         # Em algumas versões: VCOL / COLOR
         desired.add("VCOL")
 
