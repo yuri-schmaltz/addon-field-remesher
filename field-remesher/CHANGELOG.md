@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.2] — Fix ImportError (Janeiro 2025)
+
+### 🐛 Correções
+- **ImportError no Blender 5.x**: Corrigido import relativo em `ui.py` (`.backend` em vez de `..backend`)
+
 ## v0.1.1 — Quick Wins + Modal + Métricas (Dezembro 2025)
 
 ### 🎯 Melhorias de UX
