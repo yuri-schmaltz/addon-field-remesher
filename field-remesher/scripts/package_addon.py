@@ -116,9 +116,50 @@ def _read_manifest_version(addon_pkg_dir: str) -> str | None:
         return None
     return None
 
+def _validate_changelog_version(version_str: str, strict: bool) -> None:
+    """Valida se CHANGELOG.md tem entrada para a versão atual.
+    
+    Args:
+        version_str: Versão extraída do bl_info (ex: "0.1.2")
+        strict: Se True, falha caso versão não esteja no CHANGELOG
+    """
+    changelog_path = os.path.join(ROOT, "CHANGELOG.md")
+    if not os.path.exists(changelog_path):
+        if strict:
+            print(f"❌ ERRO: {changelog_path} não encontrado")
+            raise SystemExit(3)
+        else:
+            print(f"⚠️  Aviso: {changelog_path} não encontrado, pulando validação")
+            return
+    
+    try:
+        with open(changelog_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        
+        # Procurar por padrões como:
+        # ## [0.1.2] ou ## 0.1.2 ou ### [0.1.2]
+        pattern = rf"^###+?\s+\[?{re.escape(version_str)}\]?"
+        
+        if re.search(pattern, content, re.MULTILINE):
+            print(f"✅ CHANGELOG.md tem entrada para versão {version_str}")
+        else:
+            msg = f"❌ ERRO: CHANGELOG.md não tem entrada para versão {version_str}"
+            if strict:
+                print(msg)
+                print(f"   Adicione um header '## [{version_str}]' no CHANGELOG.md antes de empacotar.")
+                raise SystemExit(4)
+            else:
+                print(f"⚠️  Aviso: CHANGELOG.md não tem entrada para versão {version_str}")
+    except OSError as e:
+        if strict:
+            print(f"❌ ERRO ao ler CHANGELOG.md: {e}")
+            raise SystemExit(5)
+        else:
+            print(f"⚠️  Aviso: Erro ao ler CHANGELOG.md: {e}")
+
 def main():
     parser = argparse.ArgumentParser(description="Package Field Remesher add-on")
-    parser.add_argument("--strict", action="store_true", help="Falha se versão do manifesto divergir do bl_info")
+    parser.add_argument("--strict", action="store_true", help="Falha se versão do manifesto divergir do bl_info ou CHANGELOG não tiver entrada")
     args = parser.parse_args()
     os.makedirs(DIST_DIR, exist_ok=True)
 
@@ -144,6 +185,10 @@ def main():
             raise SystemExit(2)
         # Se não for strict, sincroniza automaticamente
         _sync_manifest_version(dst_addon, ver)
+        
+        # Validação de CHANGELOG (nova funcionalidade)
+        print("\n🔍 Validando CHANGELOG.md...")
+        _validate_changelog_version(ver, args.strict)
 
     # cria zip
     if os.path.exists(ZIP_PATH):
