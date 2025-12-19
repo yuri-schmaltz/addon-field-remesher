@@ -1,5 +1,7 @@
 # Field Remesher (Instant-like) — Blender Add-on
 
+[![CI](https://github.com/yuri-schmaltz/addon-field-remesher/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/yuri-schmaltz/addon-field-remesher/actions/workflows/ci.yml)
+
 Add-on para Blender (3.6 LTS+ e 4.x) que entrega retopologia quad “field-aligned” **estilo Instant Meshes**,
 com **fallback imediato** via Quadriflow e um **backend nativo opcional** (engine) para paridade avançada.
 

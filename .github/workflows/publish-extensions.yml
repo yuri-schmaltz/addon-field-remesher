@@ -18,9 +18,11 @@ jobs:
       - name: Validate and package add-on for Extensions (dry run)
         run: |
           python --version
+          # Verifica manifesto necessário para Blender Extensions
+          test -f field-remesher/addon/field_remesher/blender_manifest.toml
+          # Empacota (inclui validação estática de imports relativos)
           python field-remesher/scripts/package_addon.py
-          # TODO: Quando disponível, adicionar validações específicas do Blender Extensions
-          # (ex.: verificação de manifesto e estrutura exigida).
+          # TODO: adicionar validações específicas do Blender Extensions quando disponível
 
       - name: Upload artifact (ZIP)
         uses: actions/upload-artifact@v4

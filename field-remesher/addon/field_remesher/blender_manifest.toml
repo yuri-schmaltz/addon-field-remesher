@@ -1,0 +1,33 @@
+# Blender Extensions Manifest (skeleton)
+# Referência: https://projects.blender.org/blender/blender-addons / docs do Extensions
+
+schema_version = "1.0.0"
+
+# ID único do add-on no catálogo (ajuste após reservar o namespace)
+id = "field_remesher"
+
+name = "Field Remesher (Instant-like)"
+version = "0.1.2"
+type = "add-on"
+
+# Versões suportadas do Blender (ajuste conforme políticas do Extensions)
+blender_version_min = "3.6.0"
+# blender_version_max = "5.0.99"
+
+# Licença do add-on (compatível com Blender)
+license = ["GPL-3.0-or-later"]
+
+# Metadados opcionais
+summary = "Remesher estilo Instant Meshes com fallback Quadriflow"
+description = "Add-on de retopologia quad field-aligned com fallback Quadriflow e backend nativo opcional."
+website = "https://github.com/yuri-schmaltz/addon-field-remesher"
+tags = ["Remesh", "Retopology", "Modeling"]
+
+# Mantenedores (ajuste contatos/orga)
+maintainers = [
+  "Scaffold"
+]
+
+# Notas:
+# - Preencha/ajuste campos conforme a especificação atual do Blender Extensions.
+# - O workflow 'Publish (Blender Extensions) — Dry Run' valida a presença deste arquivo.
