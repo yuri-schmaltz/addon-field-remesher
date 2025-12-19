@@ -18,6 +18,10 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Smoke test (import validation without Blender)
+        run: |
+          python field-remesher/scripts/smoke_test.py
+
       - name: Package add-on (with static import validation)
         run: |
           python --version
