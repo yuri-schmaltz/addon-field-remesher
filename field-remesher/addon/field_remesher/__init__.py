@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Field Remesher (Instant-like)",
     "author": "Scaffold",
-    "version": (0, 1, 1),
+    "version": (0, 1, 2),
     "blender": (3, 6, 0),
     "location": "View3D > Sidebar > Field Remesher",
     "description": "Remesher estilo Instant Meshes com backend nativo opcional e fallback Quadriflow",

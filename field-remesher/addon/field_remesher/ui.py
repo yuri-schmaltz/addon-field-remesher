@@ -299,7 +299,8 @@ class FIELDREMESHER_PT_guides(Panel):
     def poll(cls, context):
         prefs = context.preferences.addons[__package__.split(".")[0]].preferences
         # Apenas mostrar quando engine nativo estiver disponível
-        from ..backend import instant_available
+        # ui.py está no pacote raiz `field_remesher`, portanto um único ponto é suficiente
+        from .backend import instant_available
         return prefs.show_advanced and instant_available()
 
     def draw(self, context):
