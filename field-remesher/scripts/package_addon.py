@@ -2,6 +2,7 @@ import os
 import re
 import zipfile
 import shutil
+import argparse
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 ADDON_DIR = os.path.join(ROOT, "addon", "field_remesher")
@@ -101,7 +102,24 @@ def _sync_manifest_version(addon_pkg_dir: str, version_str: str) -> None:
         # não bloquear empacote caso não seja possível escrever
         pass
 
+def _read_manifest_version(addon_pkg_dir: str) -> str | None:
+    manifest_path = os.path.join(addon_pkg_dir, "blender_manifest.toml")
+    if not os.path.exists(manifest_path):
+        return None
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            for line in f:
+                m = MANIFEST_VERSION_RE.match(line)
+                if m:
+                    return m.group("ver").strip()
+    except OSError:
+        return None
+    return None
+
 def main():
+    parser = argparse.ArgumentParser(description="Package Field Remesher add-on")
+    parser.add_argument("--strict", action="store_true", help="Falha se versão do manifesto divergir do bl_info")
+    args = parser.parse_args()
     os.makedirs(DIST_DIR, exist_ok=True)
 
     # O zip instalável do Blender deve conter uma pasta de addon no root do zip.
@@ -116,9 +134,15 @@ def main():
     # Validação estática de imports relativos antes de zipar
     _validate_relative_imports(dst_addon)
 
-    # Sincroniza versão do manifesto com bl_info
+    # Verificação de versão e sincronização
     ver = _extract_bl_info_version(dst_addon)
     if ver:
+        current_manifest_ver = _read_manifest_version(dst_addon)
+        if args.strict and current_manifest_ver is not None and current_manifest_ver != ver:
+            print("Erro: Versão do manifesto (", current_manifest_ver, ") difere do bl_info (", ver, ")", sep="")
+            print("Habilitado --strict, abortando.")
+            raise SystemExit(2)
+        # Se não for strict, sincroniza automaticamente
         _sync_manifest_version(dst_addon, ver)
 
     # cria zip

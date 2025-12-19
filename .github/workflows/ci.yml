@@ -21,7 +21,7 @@ jobs:
       - name: Package add-on (with static import validation)
         run: |
           python --version
-          python field-remesher/scripts/package_addon.py
+          python field-remesher/scripts/package_addon.py --strict
 
       - name: Upload ZIP artifact
         uses: actions/upload-artifact@v4

@@ -19,10 +19,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Package add-on
+      - name: Package add-on (strict)
         run: |
           python --version
-          python field-remesher/scripts/package_addon.py
+          python field-remesher/scripts/package_addon.py --strict
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
