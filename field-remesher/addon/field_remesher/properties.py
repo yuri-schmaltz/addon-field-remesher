@@ -10,7 +10,59 @@ from bpy.props import (
 )
 
 
+def update_preset(self, context):
+    """Callback quando preset é alterado"""
+    preset = self.preset_name
+    
+    if preset == "ORGANIC":
+        self.mode = "FACES"
+        self.target_faces = 5000
+        self.use_mesh_symmetry = False
+        self.use_preserve_sharp = False
+        self.use_preserve_boundary = True
+        self.preserve_attributes = True
+        self.smooth_normals = True
+    elif preset == "HARD_SURFACE":
+        self.mode = "FACES"
+        self.target_faces = 8000
+        self.use_mesh_symmetry = True
+        self.use_preserve_sharp = True
+        self.use_preserve_boundary = True
+        self.preserve_attributes = True
+        self.smooth_normals = False
+    elif preset == "GAME_READY":
+        self.mode = "FACES"
+        self.target_faces = 2000
+        self.use_mesh_symmetry = False
+        self.use_preserve_sharp = False
+        self.use_preserve_boundary = True
+        self.preserve_attributes = True
+        self.smooth_normals = True
+    elif preset == "HIGH_DETAIL":
+        self.mode = "EDGE"
+        self.target_edge_length = 0.05
+        self.use_mesh_symmetry = False
+        self.use_preserve_sharp = True
+        self.use_preserve_boundary = True
+        self.preserve_attributes = True
+        self.smooth_normals = True
+    # CUSTOM não muda nada
+
+
 class FieldRemesherSettings(PropertyGroup):
+    preset_name: EnumProperty(
+        name="Preset",
+        description="Configurações pré-definidas para casos comuns",
+        items=[
+            ("CUSTOM", "Personalizado", "Configuração manual", 'PREFERENCES', 0),
+            ("ORGANIC", "Orgânico", "Otimizado para personagens e formas suaves", 'SURFACE_NSURFACE', 1),
+            ("HARD_SURFACE", "Hard Surface", "Otimizado para objetos mecânicos e arquitetura", 'MESH_CUBE', 2),
+            ("GAME_READY", "Game-Ready", "Baixa densidade para jogos e tempo real", 'GAME', 3),
+            ("HIGH_DETAIL", "Alta Definição", "Máximo detalhe preservando features", 'MESH_ICOSPHERE', 4),
+        ],
+        default="CUSTOM",
+        update=update_preset
+    )
     mode: EnumProperty(
         name="Modo",
         description="Define como a densidade do mesh será controlada",
@@ -106,9 +158,24 @@ class FieldRemesherSettings(PropertyGroup):
     )
 
     density_vgroup: StringProperty(
-        name="Vertex Group (densidade)",
-        description="Nome do Vertex Group (0..1) para controlar densidade (pleno na engine; limitado no fallback)",
+        name="Grupo de Vértices (Densidade)",
+        description="Nome do Vertex Group para densidade adaptativa (0=baixa, 1=alta). Funcionalidade completa apenas com engine nativo",
         default="",
+        maxlen=64
+    )
+    
+    # Configurações de histórico/comparação (Onda 3)
+    show_comparison: BoolProperty(
+        name="Mostrar Comparação",
+        description="Exibe painel de comparação lado a lado entre original e remesh",
+        default=False
+    )
+    
+    last_config_hash: StringProperty(
+        name="Hash da Última Config",
+        description="Hash interno para detectar mudanças de configuração",
+        default="",
+        options={'HIDDEN'}
     )
 
 
