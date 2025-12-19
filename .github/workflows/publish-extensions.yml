@@ -1,0 +1,29 @@
+name: Publish (Blender Extensions) — Dry Run
+
+on:
+  workflow_dispatch:
+
+jobs:
+  prepare-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate and package add-on for Extensions (dry run)
+        run: |
+          python --version
+          python field-remesher/scripts/package_addon.py
+          # TODO: Quando disponível, adicionar validações específicas do Blender Extensions
+          # (ex.: verificação de manifesto e estrutura exigida).
+
+      - name: Upload artifact (ZIP)
+        uses: actions/upload-artifact@v4
+        with:
+          name: field_remesher_addon_extensions
+          path: field-remesher/dist/field_remesher_addon.zip
