@@ -9,6 +9,8 @@ DIST_DIR = os.path.join(ROOT, "dist")
 ZIP_PATH = os.path.join(DIST_DIR, "field_remesher_addon.zip")
 
 RELATIVE_IMPORT_RE = re.compile(r"^\s*from\s+(\.+)")
+BL_INFO_VERSION_RE = re.compile(r"version\s*:\s*\((\s*\d+\s*,\s*\d+\s*,\s*\d+\s*)\)")
+MANIFEST_VERSION_RE = re.compile(r"^\s*version\s*=\s*\"(?P<ver>[^\"]+)\"\s*$")
 
 def _validate_relative_imports(addon_pkg_dir: str) -> None:
     """Valida imports relativos contra a profundidade das pastas.
@@ -52,6 +54,53 @@ def _validate_relative_imports(addon_pkg_dir: str) -> None:
             print(" -", e)
         raise SystemExit(1)
 
+def _extract_bl_info_version(addon_pkg_dir: str) -> str | None:
+    """Extrai a versão do bl_info do __init__.py como string X.Y.Z.
+
+    Procura por uma linha do tipo: "version": (x, y, z)
+    """
+    init_path = os.path.join(addon_pkg_dir, "__init__.py")
+    try:
+        with open(init_path, "r", encoding="utf-8") as f:
+            text = f.read()
+        m = BL_INFO_VERSION_RE.search(text)
+        if not m:
+            return None
+        nums = m.group(1)
+        parts = [p.strip() for p in nums.split(",")]
+        if len(parts) != 3:
+            return None
+        major, minor, patch = (int(parts[0]), int(parts[1]), int(parts[2]))
+        return f"{major}.{minor}.{patch}"
+    except OSError:
+        return None
+
+def _sync_manifest_version(addon_pkg_dir: str, version_str: str) -> None:
+    """Sincroniza a versão no blender_manifest.toml se existir.
+
+    Substitui a linha 'version = "..."' pelo valor de version_str.
+    """
+    manifest_path = os.path.join(addon_pkg_dir, "blender_manifest.toml")
+    if not os.path.exists(manifest_path):
+        return
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        new_lines = []
+        changed = False
+        for line in lines:
+            if MANIFEST_VERSION_RE.match(line):
+                new_lines.append(f"version = \"{version_str}\"\n")
+                changed = True
+            else:
+                new_lines.append(line)
+        if changed:
+            with open(manifest_path, "w", encoding="utf-8") as f:
+                f.writelines(new_lines)
+    except OSError:
+        # não bloquear empacote caso não seja possível escrever
+        pass
+
 def main():
     os.makedirs(DIST_DIR, exist_ok=True)
 
@@ -66,6 +115,11 @@ def main():
 
     # Validação estática de imports relativos antes de zipar
     _validate_relative_imports(dst_addon)
+
+    # Sincroniza versão do manifesto com bl_info
+    ver = _extract_bl_info_version(dst_addon)
+    if ver:
+        _sync_manifest_version(dst_addon, ver)
 
     # cria zip
     if os.path.exists(ZIP_PATH):
