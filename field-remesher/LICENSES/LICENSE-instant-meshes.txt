@@ -1,0 +1,5 @@
+Placeholder — Instant Meshes upstream license
+
+Quando você adicionar o engine upstream (por submodule/fork), copie aqui o arquivo de licença do projeto,
+incluindo atribuição e condições de redistribuição conforme o upstream.
+

@@ -1,0 +1,20 @@
+Title,Body,Labels,Milestone
+FR-001 SPEC.md (funcionalidades e limites),"Criar SPEC.md com paridade, limites, critérios de aceitação.","type:chore,prio:P0",v0.1
+FR-002 Matriz de compatibilidade (COMPAT.md),Criar COMPAT.md com versões suportadas e notas ABI.,"type:docs,prio:P0",v0.1
+FR-003 Licenças e redistribuição,Adicionar LICENSES e checklist de release.,"type:chore,prio:P0",v0.1
+FR-010 Estrutura do add-on e registro,Criar addon/field_remesher com registro e preferences.,"type:feature,area:ui,prio:P0",v0.1
+FR-011 UI do painel,Painel View3D Sidebar com controles e botão Remesh.,"type:feature,area:ui,prio:P0",v0.1
+FR-020 Quadriflow backend (override robusto),Executar quadriflow_remesh com override seguro.,"type:feature,area:backend,prio:P0",v0.1
+FR-021 Não-destrutivo (duplicar/ocultar original),Criar objeto novo e manter/ocultar original.,"type:feature,prio:P0",v0.1
+FR-030 Transferir materiais,Copiar slots de material do original para o remesh.,"type:feature,area:transfer,prio:P0",v0.1
+FR-031 Transferir UV (Data Transfer),"Aplicar Data Transfer para UV, com fallback seguro.","type:feature,area:transfer,prio:P0",v0.1
+FR-032 Transferir cores (Color Attributes),Transferir cores quando existirem; degradar com warning.,"type:feature,area:transfer,prio:P1",v0.1
+FR-040 Batch multi-objeto + fila,"Processar seleção múltipla em fila, com cancel e status.","type:feature,prio:P1,area:backend",v0.2
+FR-050 Sistema de Guides (dados + JSON),Modelar guias em Custom Props e serializar JSON.,"type:feature,prio:P1,area:guides",v0.2
+FR-060 Presets (Organic/Hard-surface/Game-ready/LOD),Criar presets reprodutíveis e versionados.,"type:feature,prio:P1,area:ui",v0.2
+FR-100 Estrutura native/ (CMake + pybind11),Criar scaffold para módulo nativo e build scripts.,"type:feature,prio:P1,area:native",v0.3
+FR-110 Implementar instant_meshes_py.remesh(),Bindings com contrato mínimo; retorna verts/faces/meta.,"type:feature,prio:P0,area:native",v0.3
+FR-130 Guias influenciando engine,Converter guides para constraints e aplicar no engine.,"type:feature,prio:P1,area:guides",v0.4
+FR-140 Reprojeção BVH barycentric,Reprojetar UV/cores/normals via BVH para melhor qualidade.,"type:feature,prio:P1,area:transfer",v0.4
+FR-211 CI build native (multiplataforma),Compilar binários por versão do Blender e anexar em release.,"type:chore,prio:P2,area:ci",v1.0
+FR-202 Testes integração headless,Rodar Blender background e validar outputs.,"type:test,prio:P2",v1.0

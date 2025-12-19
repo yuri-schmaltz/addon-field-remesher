@@ -1,0 +1,14 @@
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (C) 2007 Free Software Foundation, Inc.
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+
+(This repository uses GPL-3.0-or-later for the add-on code by default.)
+Full license text: https://www.gnu.org/licenses/gpl-3.0.txt
+
+NOTE: For convenience, keep the authoritative GPL text at the URL above.
+If you require bundling the full text inside the repository, replace this file
+with the complete GPLv3 license text.
+
