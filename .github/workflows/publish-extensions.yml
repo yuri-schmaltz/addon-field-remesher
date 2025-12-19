@@ -1,6 +1,6 @@
 name: Publish (Blender Extensions) — Dry Run
 
-on:
+'on':
   workflow_dispatch:
 
 jobs:
